@@ -1192,3 +1192,132 @@ body {
 .ds-stat,
 .ds-stat__num,
 .ds-stat__label { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   Desktop layout is unchanged. Rules below only activate at
+   narrow widths via media queries.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Mobile nav (hamburger) button — hidden on desktop */
+.vp-nav__menu-btn {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.vp-nav__menu-btn:hover {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-soft);
+}
+
+/* Sidebar backdrop overlay — hidden until nav opens */
+.vp-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 19;
+  cursor: pointer;
+}
+
+.vp-sidebar-overlay.is-open {
+  display: block;
+}
+
+/* ── Mobile (≤ 768px) ────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Show hamburger button */
+  .vp-nav__menu-btn { display: flex; }
+
+  /* Hide desktop top-nav links — accessible via sidebar drawer */
+  .vp-nav__links { display: none; }
+
+  /* Search: collapse to icon-only */
+  .vp-nav__search-btn span,
+  .vp-nav__search-btn kbd { display: none; }
+  .vp-nav__search-btn { width: 36px; padding: 0; justify-content: center; }
+
+  /* Sidebar: slide-over drawer (fixed, off-screen by default) */
+  .vp-sidebar {
+    position: fixed;
+    top: var(--vp-nav-height);
+    left: 0;
+    height: calc(100dvh - var(--vp-nav-height));
+    z-index: 20;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .vp-sidebar.is-open { transform: translateX(0); }
+
+  /* Content: full width, tighter padding */
+  .vp-doc-content { padding: 24px 20px 64px; }
+
+  /* Tables: horizontal scroll to prevent page overflow */
+  .vp-doc-content table {
+    display: block;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Ensure cell content still wraps within scrollable table */
+  .vp-doc-content td,
+  .vp-doc-content th { min-width: 80px; }
+
+  /* Props tables */
+  .ds-props-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Home content tables */
+  .vp-home-content__inner table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* State grids: cap at 2 columns regardless of --ds-cols inline prop */
+  .ds-state-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Typography specimens: stack meta + sample vertically */
+  .ds-type-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  /* Prev / Next: stack vertically */
+  .vp-prev-next { grid-template-columns: 1fr; }
+  .vp-prev-next__item--next { justify-content: flex-start; }
+
+  /* Home page padding */
+  .vp-hero    { padding: 32px 20px 64px; }
+  .vp-features { padding: 24px 20px 40px; }
+  .vp-home-content { padding: 0 20px 48px; }
+
+  /* Search modal: full width, flush to top */
+  .vp-search-overlay { padding-top: 0; align-items: flex-start; }
+  .vp-search-modal { max-width: 100%; border-radius: 0 0 12px 12px; }
+}
+
+/* ── Tablet (769px – 960px): slightly narrower sidebar ──────── */
+@media (min-width: 769px) and (max-width: 960px) {
+  :root { --vp-sidebar-width: 220px; }
+  .vp-doc-content { padding: 28px 28px 80px; }
+}

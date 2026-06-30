@@ -14,9 +14,11 @@ interface HeaderProps {
   onSearchOpen: () => void
   theme: 'light' | 'dark'
   onThemeToggle: () => void
+  navOpen: boolean
+  onMenuToggle: () => void
 }
 
-export function Header({ onSearchOpen, theme, onThemeToggle }: HeaderProps) {
+export function Header({ onSearchOpen, theme, onThemeToggle, navOpen, onMenuToggle }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -29,6 +31,29 @@ export function Header({ onSearchOpen, theme, onThemeToggle }: HeaderProps) {
     <header className={`vp-nav${scrolled ? ' is-scrolled' : ''}`}>
       <div className="vp-nav__bar">
         <div className="vp-nav__container">
+          {/* Hamburger — visible on mobile only (CSS: display:none on desktop) */}
+          <button
+            className="vp-nav__menu-btn"
+            onClick={onMenuToggle}
+            aria-label={navOpen ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={navOpen}
+          >
+            {navOpen ? (
+              /* X icon */
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              /* Hamburger icon */
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            )}
+          </button>
+
           {/* Logo */}
           <NavLink to="/" className="vp-nav__logo" aria-label="Home">
             <div className="vp-nav__logo-icon">QX</div>

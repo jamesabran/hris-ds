@@ -113,6 +113,7 @@ function SidebarGroup({ section }: { section: NavSection }) {
 
 export function Shell() {
   const [searchOpen, setSearchOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (localStorage.getItem('vp-theme') as 'light' | 'dark') ?? 'light'
   })
@@ -123,6 +124,11 @@ export function Shell() {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('vp-theme', theme)
   }, [theme])
+
+  // Close mobile nav on route change
+  useEffect(() => {
+    setNavOpen(false)
+  }, [location.pathname])
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
@@ -141,12 +147,21 @@ export function Shell() {
         onSearchOpen={() => setSearchOpen(true)}
         theme={theme}
         onThemeToggle={() => setTheme(t => t === 'light' ? 'dark' : 'light')}
+        navOpen={navOpen}
+        onMenuToggle={() => setNavOpen(o => !o)}
       />
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
 
+      {/* Mobile sidebar backdrop */}
+      <div
+        className={`vp-sidebar-overlay${navOpen ? ' is-open' : ''}`}
+        onClick={() => setNavOpen(false)}
+        aria-hidden="true"
+      />
+
       <div className="vp-body">
         {/* Left sidebar */}
-        <aside className="vp-sidebar" aria-label="Site navigation">
+        <aside className={`vp-sidebar${navOpen ? ' is-open' : ''}`} aria-label="Site navigation">
           <nav className="vp-sidebar__nav">
             {NAV.map(section => (
               <SidebarGroup key={section.title} section={section} />
